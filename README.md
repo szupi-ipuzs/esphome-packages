@@ -2,7 +2,7 @@
 Some useful packages for use in esphome
 
 ## battery_notes.yaml
-This package is supposed to mimic the functionality offered by github/andrew-codechimp/HA-Battery-Notes, ie. it allows you to add a sensor that show the battery type, quantity and set timestamp when you exchange the battery.
+This package is supposed to mimic the functionality offered by [andrew-codechimp's HA-Battery-Notes](https://github.com/andrew-codechimp/HA-Battery-Notes), ie. it adds sensors that show the battery type, quantity and to set timestamp when you exchange the battery.
 Requires a time source to be configured and its id passed as one of package vars.
 The timestamp is stored persistently.
 
