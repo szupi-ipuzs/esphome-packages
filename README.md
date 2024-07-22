@@ -48,4 +48,4 @@ sensor:
 
 ```
 
-The above will create for you a sensor that shows the current count. The id of this sensor is ${event_counter_name}_sensor.
+The above will create for you a sensor that shows the current count. The id of this sensor is ${event_counter_name}_sensor. The state of this sensor is stored persistently and it's restored on startup.
