@@ -1,0 +1,26 @@
+
+globals:
+  - id: ${event_counter_name}_global
+    type: uint64_t
+    restore_value: true
+
+esphome:
+  on_boot: 
+    then:
+      - lambda: |-
+          id(${event_counter_name}_sensor).publish_state(id(${event_counter_name}_global));
+
+sensor:
+  - platform: template
+    id: ${event_counter_name}_sensor
+    name: ${event_counter_friendly_name}
+    update_interval: never
+
+script:
+  - id: ${event_counter_name}
+    parameters: 
+      by_value: int
+    then:
+      - lambda: |-
+          id(${event_counter_name}_global) += by_value;
+          id(${event_counter_name}_sensor).publish_state(id(${event_counter_name}_global));
