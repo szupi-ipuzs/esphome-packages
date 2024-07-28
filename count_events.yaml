@@ -3,11 +3,18 @@ globals:
   - id: ${event_counter_name}_global
     type: uint64_t
     restore_value: true
+  - id: ${event_counter_name}_timestamp_global
+    type: time_t
+    restore_value: true
 
 esphome:
   on_boot: 
     then:
       - lambda: |-
+          if (id(${event_counter_name}_timestamp_global) != 0)
+          {
+            id(${event_counter_name}_timestamp).publish_state(id(${event_counter_name}_timestamp_global));
+          }
           id(${event_counter_name}_sensor).publish_state(id(${event_counter_name}_global));
 
 sensor:
@@ -15,6 +22,18 @@ sensor:
     id: ${event_counter_name}_sensor
     name: ${event_counter_friendly_name}
     update_interval: never
+    entity_category: diagnostic
+    icon: mdi:counter
+
+  - platform: template
+    id: ${event_counter_name}_timestamp
+    name: "Last triggered"
+    entity_category: diagnostic
+    device_class: timestamp
+    icon: mdi:clock-end
+    update_interval: never
+    lambda: |-
+        return {id(${event_counter_name}_timestamp_global)};
 
 script:
   - id: ${event_counter_name}
@@ -24,3 +43,9 @@ script:
       - lambda: |-
           id(${event_counter_name}_global) += by_value;
           id(${event_counter_name}_sensor).publish_state(id(${event_counter_name}_global));
+          auto nowTime = id(${event_counter_timeid}).now();
+          if (nowTime.is_valid())
+          {
+              id(${event_counter_name}_timestamp_global) = nowTime.timestamp;
+              id(${event_counter_name}_timestamp).publish_state(id(${event_counter_name}_timestamp_global));
+          }

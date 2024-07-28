@@ -2,7 +2,10 @@ esphome:
     on_boot: 
       then:
         - lambda: |-
-            id(battery_last_replaced_sensor).publish_state(id(battery_last_replaced_global));
+            if (id(battery_last_replaced_global) != 0)
+            {
+              id(battery_last_replaced_sensor).publish_state(id(battery_last_replaced_global));
+            }
             if (${battery_notes_count} == 1)
             {
                 id(battery_type_text).publish_state("${battery_notes_type}");
