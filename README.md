@@ -56,10 +56,10 @@ The above will create for you a sensor that shows the current count. The id of t
 This package will create a template switch, which serves as a kind of "child lock". I add it in devices (plugs mainly) that have a physical button. The switch's state can control whether the button can actually switch the relay on/off (although this logic needs to be added in your main yaml). Since the plugs usually have also some led indicators, I use it to show the state of the switch - this is what the "light_id" is for (it is not created, it must be defined in your main yaml).
 
 Example usage:
-```
+``` yaml
 packages:
   button_enabler: !include
-    file: ../shared_public/button_enabling_switch.yaml
+    file: button_enabling_switch.yaml
     vars:
       switch_id: physical_button_enabled_switch
       switch_name: "Physical Button Enabled"
