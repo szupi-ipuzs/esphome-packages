@@ -1,0 +1,27 @@
+
+esphome:
+  on_boot:
+      priority: 650
+      then:
+        - lambda:
+            if (id(${switch_id}).state)
+            {
+              id(${light_id}).turn_on();
+            }
+            else
+            {
+              id(${light_id}).turn_off();
+            }
+
+switch:
+  - platform: template
+    name: $switch_name
+    id: ${switch_id}
+    optimistic: True
+    restore_mode: RESTORE_DEFAULT_ON
+    turn_on_action:
+      - then:
+          - light.turn_on: ${light_id}
+    turn_off_action:
+      - then:
+          - light.turn_off: ${light_id}

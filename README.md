@@ -26,6 +26,7 @@ Here are the ids of these entities:
 
 ## count_events.yaml
 This package will help you keep track of the number of any events. It provides a sensor and a simple esphome script to be executed when an interesting even has occur.
+Additionaly it creates a button that resets the events count.
 
 Example usage:
 ```yaml
@@ -49,3 +50,37 @@ sensor:
 ```
 
 The above will create for you a sensor that shows the current count. The id of this sensor is ${event_counter_name}_sensor. The state of this sensor is stored persistently and it's restored on startup.
+
+
+## button_enabling_switch.yaml
+This package will create a template switch, which serves as a kind of "child lock". I add it in devices (plugs mainly) that have a physical button. The switch's state can control whether the button can actually switch the relay on/off (although this logic needs to be added in your main yaml). Since the plugs usually have also some led indicators, I use it to show the state of the switch - this is what the "light_id" is for (it is not created, it must be defined in your main yaml).
+
+Example usage:
+```
+packages:
+  button_enabler: !include
+    file: ../shared_public/button_enabling_switch.yaml
+    vars:
+      switch_id: physical_button_enabled_switch
+      switch_name: "Physical Button Enabled"
+      light_id: button_active_led
+
+light:
+  - ...
+    id: button_active_led
+
+
+binary_sensor:
+  - ...
+    on_multi_click:
+        - timing:
+             - ON for at most 1s
+             - OFF for at least 0.2s
+          then:
+            - lambda: |-
+                if (id(physical_button_enabled_switch).state)
+                {
+                  id(switch_socket).toggle();
+                }
+
+```
